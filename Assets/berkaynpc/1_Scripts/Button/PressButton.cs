@@ -44,9 +44,13 @@ namespace project_WAST
         [SerializeField] private bool controllerStatus;           // CHECK ALL Controller BUTTONS
 
         private void Awake()
+        {         
+            thisAnimator = GetComponent<Animator>();           
+        }
+
+        private void Start()
         {
-            canPress = true;
-            thisAnimator = GetComponent<Animator>();             //
+            canPress = true; 
             
             switch (buttonType)                                  //OBJECT INSTANTIATE SETTINGS
             {
@@ -55,39 +59,11 @@ namespace project_WAST
 
                     pressButtonStatus = false;
                     break;
-            }            
-        }
+            }
 
-        private void Start()
-        {           
             thisAnimator.SetBool("canPress", pressButtonStatus);           //SET THIS BUTTON'S START ANIMATION STATE
         }
-
-        private IEnumerator WaitForTimer()                          //WAIT FOR canPressTimer
-        {
-            canPress = false;
-            thisAnimator.SetBool("canPress", canPress);             //yeni baðlanan biri kapý açýksa kapalý görüyor *** bunu düzelt ******************************
-            switch (buttonType)
-            {
-                case ButtonType.PressNoTimer:                        // PRESS BUTTON TYPE WITHOUT TIMER (canPressTimer = 0)
-                case ButtonType.PressWithTimer:                      // PRESS BUTTON TYPE WITH TIMER (canPressTimer = SET IN EDITOR) 
-                case ButtonType.PressWithoutTimerFALSE:
-                    pressButtonStatus = false;
-                    yield return new WaitForSeconds(canPressTimer);  // WAIT FOR canPressTimer SECS
-                    canPress = true;                                 // PLAYERS CAN PRESS BUTTON      
-                    thisAnimator.SetBool("canPress", canPress);      // SET ANIMATION STATE
-                    break;
-
-                case ButtonType.PressOnOff:                          // ON-OFF BUTTON TYPE
-                case ButtonType.PressAndHold:                        // HOLD BUTTON TYPE
-                    canPress = true;                                 // Players can press button 
-                    thisAnimator.SetBool("canPress", pressButtonStatus);    // Set animation
-                    break;
-            }           
-                               //Stop coroutine
-        }
-
-       
+         
         public void Interact()  // Player pressed to F //butonla ilgili sýkýntý var bazen basýyor bazen basmýyor sebebi belli deðil
         { 
             controllerStatus = myFunctions.CheckControllerObjects(controllerObjs, myLogicGateType);
@@ -129,13 +105,12 @@ namespace project_WAST
                         break;
 
 
-                }
-              
+                }              
             }
             else
             {
                 pressButtonStatus = false;
-              PressedMe(pressButtonStatus); 
+                PressedMe(pressButtonStatus); 
             }
         }      
 
@@ -166,7 +141,32 @@ namespace project_WAST
                 PressedMe(false);
             }
         }
-       
+
+        private IEnumerator WaitForTimer()                          //WAIT FOR canPressTimer
+        {
+            canPress = false;
+            thisAnimator.SetBool("canPress", canPress);             //yeni baðlanan biri kapý açýksa kapalý görüyor *** bunu düzelt ******************************
+            switch (buttonType)
+            {
+                case ButtonType.PressNoTimer:                        // PRESS BUTTON TYPE WITHOUT TIMER (canPressTimer = 0)
+                case ButtonType.PressWithTimer:                      // PRESS BUTTON TYPE WITH TIMER (canPressTimer = SET IN EDITOR) 
+                case ButtonType.PressWithoutTimerFALSE:
+                    pressButtonStatus = false;
+                    yield return new WaitForSeconds(canPressTimer);  // WAIT FOR canPressTimer SECS
+                    canPress = true;                                 // PLAYERS CAN PRESS BUTTON      
+                    thisAnimator.SetBool("canPress", canPress);      // SET ANIMATION STATE
+                    break;
+
+                case ButtonType.PressOnOff:                          // ON-OFF BUTTON TYPE
+                case ButtonType.PressAndHold:                        // HOLD BUTTON TYPE
+                    canPress = true;                                 // Players can press button 
+                    thisAnimator.SetBool("canPress", pressButtonStatus);    // Set animation
+                    break;
+            }
+
+            yield break;   //Stop coroutine
+        }
+
 
     }
 }

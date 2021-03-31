@@ -16,7 +16,9 @@ namespace project_WAST
 		[HideInInspector]
 		public Transform currentTarget;
 
-		[Range(1,5)]
+		public List<Transform> visibleTargets = new List<Transform>();
+
+	   [Range(1,5)]
 		public float meshResolution;
 		public int edgeResolveIterations;
 		public float edgeDstThreshold;
@@ -59,9 +61,10 @@ namespace project_WAST
 
 		public void FindVisibleTargets()
 		{
+			visibleTargets.Clear();
 			currentTarget = null;
 
-			Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
+			Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask); //360 derece icindeki hedefleri buluyor			
 
 			for (int i = 0; i < targetsInViewRadius.Length; i++)
 			{
@@ -72,6 +75,7 @@ namespace project_WAST
 					float dstToTarget = Vector3.Distance(transform.position, target.position);
 					if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
 					{
+						visibleTargets.Add(target);
 						currentTarget = target;
 					}
 				}

@@ -28,11 +28,11 @@ namespace project_WAST
 
         private void OnTriggerEnter(Collider other)
         {
-            //buraya interface gelecek damageable=other.getcomponent<IDamageable>(); vs vs vs
+            //buraya interface gelecek damageable=other.getcomponent<IDamageable>(); vs vs vs //kilic karaktere vurunca karakter hasar yiyor**
 
             IDamageable damageableObj = other.GetComponent<IDamageable>();
 
-            if(damageableObj!=null)
+            if(damageableObj!=null && !other.CompareTag("Player"))
             {
                 damageableObj.TakeDamage(currentWeaponDamage);
             }

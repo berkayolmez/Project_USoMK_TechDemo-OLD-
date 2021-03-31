@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,90 +21,50 @@ namespace project_WAST
         footLeft,
         footCenter,
         footRight,
-    }
+    } //bodypartlari karakterin parcalarindan cekebilirim
 
     public class PlayerInteractor : MonoBehaviour
     {
-        PlayerManager playerManager;
-        PlayerLocomotion playerLocomotion;
-        CharacterController cController;
-        CameraDetectWalls cameraDetect;
-        LayerMask cameraLayerMask;
+        IPickable pickableObj;
         InputHandler inputHandler;
+        PickableUI pickableUI;
+        PlayerManager playerManager;
+        PlayerAnimatorManager animatorManager;
+        public event EventHandler KeyChange;  
         [HideInInspector]
-        public GameObject[] interactorObjs;
+        public GameObject[] interactorObjs; 
 
-        public event EventHandler KeyChange;
-        public bool canInteract=true;
-        public bool isGrab = false;
-        private IInteractable interactable;
-        private IHold holding;
-        [SerializeField]  private IHaveStatus haveStatus;
-        [SerializeField] private GameObject cameraHandler;
+        [Header("Objects")]
+        [SerializeField] private GameObject pickableUIObject;
+
+        [Header("Variables")]     
+        public bool canInteract =true;        
+        [SerializeField] private float pickUItimer=4;
         [SerializeField] private List<RequirementTypes.RequirementType> requirementList;
-        public GameObject pushableObj;
-        public Vector3 pushableNormal;
-
         public List<RequirementTypes.RequirementType> GetKeyList()
         {
             return requirementList;
         }
+
         private void Awake()
         {
-            playerManager = GetComponent<PlayerManager>();
-            playerLocomotion = GetComponent<PlayerLocomotion>();
             inputHandler = GetComponent<InputHandler>();
-            cController = GetComponent<CharacterController>();
-            cameraDetect = cameraHandler.GetComponent<CameraDetectWalls>();
-
+            animatorManager = GetComponentInChildren<PlayerAnimatorManager>();
+            playerManager = GetComponent<PlayerManager>();
             requirementList = new List<RequirementTypes.RequirementType>();
             requirementList.Add(RequirementTypes.RequirementType.nothing); //karakterin bütün butonlarla etkileþimi iiçin bla bla bu yazýyý düzelt 
-
         }
+
         private void Start()
         {
-            canInteract = true;
+            pickableUI = FindObjectOfType<PickableUI>();
         }
-        private void Update()
-        {
-            if (inputHandler.intRelease)
-            {
-                canInteract = true;
-            }
-        }
-        public void HandleFixedInteractors()
-        {  
-            //HandleWallRunCheck(); //askida
-        }
-        public void GetKey(RequirementTypes.RequirementType reqType)
-        {
-            if(!ContainsKey(reqType))
-            {
-                requirementList.Add(reqType);
-                KeyChange?.Invoke(this, EventArgs.Empty);
-            }           
-        }
-        public void DeletKey(RequirementTypes.RequirementType reqType)
-        {
-            requirementList.Remove(reqType);
-            KeyChange?.Invoke(this, EventArgs.Empty);
-        }
-        public bool ContainsKey(RequirementTypes.RequirementType reqType)
-        {
-            return requirementList.Contains(reqType);
-        }        
+
         private void OnTriggerEnter(Collider other)
         {
-            holding = other.GetComponent<IHold>(); //sistemi zorlayabilir kontrol et
+            HandleNearByObj(other, true);
+        }
 
-            if (holding != null)
-            {
-                if (ContainsKey(holding.reqType))
-                {
-                    holding.Holding();
-                }
-            }
-        }              
         private void OnTriggerStay(Collider other)
         {
             RequirementTypes key = other.GetComponent<RequirementTypes>(); //req olarak deðiþtir
@@ -114,58 +75,115 @@ namespace project_WAST
                 Destroy(key.gameObject);
             }
 
-            if (inputHandler.interactFlag && canInteract)
-            {
-                interactable = other.GetComponent<IInteractable>();   
-
-                if (interactable != null && ContainsKey(interactable.reqType))
-                {
-                    Debug.Log(interactable);
-                    interactable.Interact();
-                    canInteract = false;
-                }
+            if(inputHandler.f_Key_Press && canInteract)
+            {               
+                HandlePressInteractable(other, true);
             }
-
-            if (inputHandler.intRelease)
+            
+            if(inputHandler.f_Key_Release && !canInteract)
             {
-                canInteract = true;
-                if (interactable != null)
-                {
-                    if (ContainsKey(interactable.reqType))
-                    {                        
-                        interactable.StillPress(false);
-                       // interactable = null;
-                    }
-                }       
+                HandlePressInteractable(other, false);
             }
         }
+
         private void OnTriggerExit(Collider other)
         {
-            holding = other.GetComponent<IHold>();
+            HandleNearByObj(other,false);
+        }
+
+        private void HandleNearByObj(Collider other,bool inArea)
+        {
+            IHold holding = other.GetComponent<IHold>();
+
             if (holding != null)
             {
                 if (ContainsKey(holding.reqType))
                 {
-                    holding.AreaEmpty();
+                    if (inArea)
+                    {
+                        holding.Holding();
+                    }
+                    else
+                    {
+                        holding.AreaEmpty();
+                    }                   
                 }
             }
-       
-            if (interactable != null) //buna daha güzel çözüm bulunabilirse silinmeli
-            {               
-                haveStatus = other.GetComponent<IHaveStatus>();
 
-                if (ContainsKey(interactable.reqType) && haveStatus !=null && haveStatus.myStatus)
-                {                   
+            IInteractable interactable = other.GetComponent<IInteractable>();
+
+            if (interactable != null)
+            {
+                if (!inArea)
+                {
                     interactable.StillPress(false);
+                    animatorManager.animator.SetBool("isPressing", false);
+                }
+            }
+
+            IPickable pickableObj = other.GetComponent<IPickable>();
+
+            if (pickableObj != null)
+            {               
+                if (inArea)
+                {
+                    string pickableText = pickableObj.myPickableText;
+                    pickableUI.pickableText.text = "Pick Up (F-Key) "+ pickableText;
+                    pickableUI.pickableIcon.enabled = true;
+                    pickableUI.pickableIcon.sprite = pickableObj.myPickableIcon;
+                    //pickableObj.NearByObject();
+                    pickableUIObject.SetActive(true);
+                    //set UI text to pickable obj
+                    //set text pop up to true
+                }
+                else
+                {
+                    pickableUIObject.SetActive(false);
                 }
             }
         }
-        void HandleWallRunCheck()
-        {
-           // playerLocomotion.isWallRight = Physics.Raycast(transform.position, transform.right, 1f, playerLocomotion.walkableWallMask);
-           // playerLocomotion.isWallLeft = Physics.Raycast(transform.position, -transform.right, 1f, playerLocomotion.walkableWallMask);
-        } //askida
 
+        private void HandlePressInteractable(Collider other,bool isPressed)
+        {
+            IInteractable interactable = other.GetComponent<IInteractable>();
+
+            if (interactable != null && ContainsKey(interactable.reqType))
+            {
+                if (isPressed)
+                {                   
+                    canInteract = false;
+                    interactable.Interact();
+                    animatorManager.animator.SetBool("isPressing", true);
+                   animatorManager.PlayTargetAnimation("PressEnter", false);
+                }
+                else
+                {
+                    canInteract = true;
+                    interactable.StillPress(false);
+                    animatorManager.animator.SetBool("isPressing", false);
+                }
+            }
+            else
+            {
+                animatorManager.animator.SetBool("isPressing", false);
+            }
+
+            IPickable pickableObj = other.GetComponent<IPickable>();
+
+            if (pickableObj != null)
+            {
+                if (isPressed)
+                {                 
+                    pickableObj.PickInteract(playerManager);
+                    pickableUIObject.SetActive(false);
+
+                    //item alýnýnca farklý bir efett çýksýn diye corouine var buna kesin bak
+                   // StartCoroutine("PickUpClose", pickUItimer);
+                }
+            }
+        }
+
+        
         public bool bodyInteractor(Bodyparts whichPart, LayerMask getMask, float interactionDist, out RaycastHit sendHit)
         {
             int partIndex = (int)whichPart;
@@ -181,6 +199,34 @@ namespace project_WAST
             Debug.DrawRay(interactorObjs[partIndex].transform.position, transform.forward, Color.magenta);
             return bodyInteract;
         }
+
+        IEnumerator PickUpClose(float getTimer)
+        {
+            yield return new WaitForSeconds(getTimer);
+            pickableUIObject.SetActive(false);
+            yield break;
+        }
+
+
+            #region Requirement Get / Delete / Contains
+        public void GetKey(RequirementTypes.RequirementType reqType)
+        {
+            if (!ContainsKey(reqType))
+            {
+                requirementList.Add(reqType);
+                KeyChange?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public void DeletKey(RequirementTypes.RequirementType reqType)
+        {
+            requirementList.Remove(reqType);
+            KeyChange?.Invoke(this, EventArgs.Empty);
+        }
+        public bool ContainsKey(RequirementTypes.RequirementType reqType)
+        {
+            return requirementList.Contains(reqType);
+        }
+        #endregion
 
     }
 }

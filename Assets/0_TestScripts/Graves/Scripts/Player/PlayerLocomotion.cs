@@ -7,8 +7,8 @@ namespace project_WAST
     public class PlayerLocomotion : MonoBehaviour
     {
         IPushable pushable;
-        private Vector3 horVector;
-        private Vector3 verVector;
+        Vector3 horVector;
+        Vector3 verVector;
         InputHandler inputHandler;
         PlayerAnimatorManager animatorManager;
         PlayerManager playerManager;
@@ -43,11 +43,11 @@ namespace project_WAST
         public float rollSpeed = 2;
         public bool canRotate=true;
         public bool canMove = true;
-        private Vector3 targetPos;
+        Vector3 targetPos;
 
         [Header("Falling Variables")]
         [SerializeField] private float fallSpeed=30;
-         public float inAirTimer;
+        public float inAirTimer;
 
         [Header("Push/Pull Variables")]
         public bool canPushPull;
@@ -100,16 +100,13 @@ namespace project_WAST
             HandleImpacting();
             HandlePushPull();
             HandleClimbing();
-            //HandleWallRun(); //askida
         }
 
         #region Check Grounded and Set Gravity
         private void CheckGrounded()
         {
-
-                gravityDir = new Vector3(transform.position.x, transform.position.y - groundDist, transform.position.z);
-                playerManager.isGrounded = Physics.CheckCapsule(transform.position, gravityDir, groundRad, groundMask);
-            
+            gravityDir = new Vector3(transform.position.x, transform.position.y - groundDist, transform.position.z);
+            playerManager.isGrounded = Physics.CheckCapsule(transform.position, gravityDir, groundRad, groundMask);      
         }
         private void HandleSetGravity()
         {
@@ -352,6 +349,7 @@ namespace project_WAST
             } 
         }
 
+        #region CLIMB FUNCTIONS
         private void HandleClimbing()
         {
             if (playerManager.isClimbing)
@@ -361,8 +359,8 @@ namespace project_WAST
                     moveDirection = transform.right * inputHandler.horizontalInput + transform.forward * inputHandler.verticalInput;
                     SnapInputs();
                     float moveA = Mathf.Clamp01(Mathf.Abs(moveDirection.x) + Mathf.Abs(moveDirection.y));
-                    StartCoroutine(ClimbToFall());
-                    //StartCoroutine(ClimbWallJump());
+                   StartCoroutine(ClimbToFall());
+                   // StartCoroutine(ClimbWallJump());
                }
 
                 cController.Move(transform.forward * climbSpeed / 5 * Time.deltaTime); //duvara dogru itiyor***    
@@ -396,7 +394,7 @@ namespace project_WAST
             {
                 if (inputHandler.climbFlag && !playerManager.isInAir)
                 {
-                    if (playerInteractor.bodyInteractor(Bodyparts.headCenter,climbableWallMask,1) && playerInteractor.bodyInteractor(Bodyparts.headRight,climbableWallMask,1) && playerInteractor.bodyInteractor(Bodyparts.headLeft, climbableWallMask, 1))
+                    if (playerInteractor.bodyInteractor(Bodyparts.headCenter,climbableWallMask,0.5f) && playerInteractor.bodyInteractor(Bodyparts.headRight,climbableWallMask, 0.5f) && playerInteractor.bodyInteractor(Bodyparts.headLeft, climbableWallMask, 0.5f))
                     {
                         if (!playerManager.inAnim)
                         {
@@ -413,18 +411,29 @@ namespace project_WAST
 
         IEnumerator ClimbEnd()
         {
-            animatorManager.PlayTargetAnimation("ClimbEnd", true);
+            animatorManager.PlayTargetAnimation("ClimbEnd", true);            
+            float elapsedTime = 0;
             playerManager.isClimbing = false;
             playerManager.isGrounded = true;
-            cController.Move(transform.up * 1);
-            cController.Move(transform.forward * 2);          
-            yield return new WaitForSeconds(0.55f);
-            canSetGravity = true; 
+            while (elapsedTime<=0.65f)
+            {
+                elapsedTime += Time.deltaTime;
+                cController.Move(transform.up * 0.75f * Time.deltaTime);
+                cController.Move(transform.forward * 0.75f * Time.deltaTime);
+                yield return null;
+            }
+            canSetGravity = true;
             canRotate = true;
             canMove = true;
             climbToEnd = false;
             yield break;
         }
+
+        void SetNewPos(Vector3 newDir, float force)
+        {
+           // cController.Move(newDir * force * Time.deltaTime);
+        }
+
 
         IEnumerator ClimbToFall()
         {
@@ -458,8 +467,7 @@ namespace project_WAST
 
         IEnumerator ClimbWallJump()
         {
-            animatorManager.PlayTargetAnimation("WallJumping", true);
-           
+            animatorManager.PlayTargetAnimation("WallJumping", true);           
             playerManager.isClimbing = false;
             playerManager.isGrounded = false;
             playerManager.isInAir = true;
@@ -472,50 +480,14 @@ namespace project_WAST
             }
             else
             {
-                StartCoroutine(ClimbToFall());
+               
+              //  StartCoroutine(ClimbToFall());
             }
       
             yield break;
         }
 
-        private void HandleWallRun()
-        {
-            if (!animatorManager.animator.GetBool("inAnim"))
-            {
-                if (inputHandler.wallRunFlag && (isWallLeft || isWallRight))
-                {
-                    playerManager.isWallRunning = true;
-                }
-            }
-
-            if(playerManager.isWallRunning)
-            {
-                moveDirection = verVector * inputHandler.verticalInput + horVector * inputHandler.horizontalInput;
-
-                SnapInputs();
-
-                if (inputHandler.moveAmount > 0)
-                {
-                    animatorManager.PlayTargetAnimation("WallRunning", true);
-                    moveDirection.y = 0;
-                    Quaternion rollRot = Quaternion.LookRotation(moveDirection);
-                    transform.rotation = rollRot;
-                    //playerManager.isRolling = true;
-                }
-
-                if(!isWallLeft && !isWallRight)
-                {
-                    playerManager.isWallRunning = false;
-                   // animatorManager.PlayTargetAnimation("Landing", true);
-                    //animatorManager
-                }
-            }
-            else
-            {
-
-            }
-
-        } //suan calismiyor askida
+        #endregion
 
         #region Functions
         public void HandleAddImpact(Vector3 forceDir,float addForce)
@@ -574,14 +546,6 @@ namespace project_WAST
         {
             yield return new WaitForSeconds(0.2f);
             playerManager.isForced = true;
-        }
-
-        void OnDrawGizmosSelected()
-        {
-            /*Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(transform.position, groundRad);
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(gravityDir, groundRad);*/
         }
 
         #endregion

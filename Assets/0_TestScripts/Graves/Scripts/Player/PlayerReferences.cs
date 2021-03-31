@@ -6,24 +6,35 @@ namespace project_WAST
     {
         PlayerAnimatorManager animatorManager;
 
+        [Header("Character Health")]
         public int healthLevel = 10;
         public int maxHealth;
         public int currentHealth;
-
         public HealthBar healthBar;
+        public StaminaBar staminaBar;
+
+        [Header("Character Stamina")]
+        public int staminaLevel = 10;
+        public int maxStamina;
+        public int currentStamina;
 
         private void Awake()
         {
+            //healthBar = FindObjectOfType<HealthBar>(); disaridan bulmak yerine el ile konuldu fikir degisirsen bunu ac
+            //staminaBar = FindObjectOfType<staminaBar>(); disaridan bulmak yerine el ile konuldu fikir degisirsen bunu ac
             animatorManager = GetComponentInChildren<PlayerAnimatorManager>();
         }
 
         private void Start()
-        {
-            Debug.Log(healthBar);
-            //healthBar = healthBar.GetComponent<HealthBar>();
+        {         
             maxHealth = SetMaxHealthFromHealthLevel();
             currentHealth = maxHealth;
             healthBar.SetMaxHealth(maxHealth);
+
+            maxStamina = SetMaxStaminaFromStaminaLevel();
+            currentStamina = maxStamina;
+            staminaBar.SetMaxStamina(maxHealth);
+            //stamina bar gelecek
         }
 
         private int SetMaxHealthFromHealthLevel()
@@ -31,11 +42,21 @@ namespace project_WAST
             maxHealth = healthLevel * 10;
             return maxHealth;
         }
+
+        private int SetMaxStaminaFromStaminaLevel()
+        {
+            maxStamina = staminaLevel * 10;
+            return maxStamina;
+        }
+
         public void TakeDamage(int damage)
         {
             currentHealth -= damage;
             healthBar.SetCurrentHealth(currentHealth);
-            animatorManager.PlayTargetAnimation("TakeDamage_1", true);
+            if(currentHealth>0)
+            {
+                animatorManager.PlayTargetAnimation("TakeDamage_1", true);
+            }
 
             if (currentHealth <= 0)
             {
@@ -43,6 +64,12 @@ namespace project_WAST
                 animatorManager.PlayTargetAnimation("Dying_1", true);
                 //HandlePlayerDeath
             }
+        }
+
+        public void TakeStaminaDamage(int damage) //stamina degerine gore hareketi hýzý azalabilir*******
+        {
+            currentStamina -= damage;
+            staminaBar.SetCurrentStamina(currentStamina);
         }
     }
 }

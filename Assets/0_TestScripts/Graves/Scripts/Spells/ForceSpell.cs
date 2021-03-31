@@ -4,13 +4,14 @@ using UnityEngine;
 
 namespace project_WAST
 {
-    [CreateAssetMenu(menuName ="Spells/ForceSpell")]
-    public class ForceSpell : SpellProjectile
+    [CreateAssetMenu(menuName = "Spells/ForceSpell")]
+    public class ForceSpell : SpellItem
     {
+        [Header("Spell Camera Shake")]
         [SerializeField] private float shakeIntensity = 2f;
         [SerializeField] private float shakeTime = 0.2f;
+        [SerializeField] private int forceAmount; //editor ile gösterme yapýlabilir bunu düzenle
         Vector3 forceDir = Vector3.zero;
-        public int forceAmount; //editor ile gösterme yapýlabilir bunu düzenle
 
         #region ForceSpellTypes
 
@@ -26,18 +27,17 @@ namespace project_WAST
 
         #endregion
 
-        public override void AttemptToCastSpell(PlayerAnimatorManager animManager)
+
+        public override void AttemptToCastSpell(PlayerAnimatorManager animManager,bool inAnim)
         {
             GameObject instantWarmUpFX = Instantiate(spellWarmUpFX, animManager.transform);
-            animManager.PlayTargetAnimation(spellAnimation, true);
+            animManager.PlayTargetAnimation(spellAnimation, inAnim);
         }
 
-        public override void SuccesfullyCastSpell(PlayerAnimatorManager animManager,Transform castTransform,Transform playerTransform,LayerMask getSpellMask)
+        public override void SuccesfullyCastSpell(Transform castTransform, Transform playerTransform, LayerMask getSpellMask)
         {
             GameObject instantSpellFx = Instantiate(spellCastFX, castTransform);
-            animManager.PlayTargetAnimation(spellAnimation, true);
-
-            PushSpell(playerTransform, getSpellMask);         
+            PushSpell(playerTransform, getSpellMask);
         }
 
         private void PushSpell(Transform playerTransform, LayerMask getSpellMask)
@@ -62,11 +62,11 @@ namespace project_WAST
                             case SpellType.Spell_Bounce:
                                 forceDir = Vector3.up;
                                 break;
-                        }                      
+                        }
                     }
 
                     PlayerCameraController.Instance.ShakeCamera(shakeIntensity, shakeTime); //CamShake
-                                                                                             //hit.pointte bir tane animasyon parlatabilirim
+                                                                                            //hit.pointte bir tane animasyon parlatabilirim
                     Rigidbody getRigid = hit.collider.GetComponent<Rigidbody>();
                     if (getRigid != null)
                     {
@@ -74,6 +74,9 @@ namespace project_WAST
                         getRigid.AddForce(forceDir * forceAmount, ForceMode.Impulse);
                     }
                 }
+
+
+
             }
         }
 

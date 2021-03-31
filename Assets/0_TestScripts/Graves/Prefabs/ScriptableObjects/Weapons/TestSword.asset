@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecbb279ac24255240929fb98de812fce, type: 3}
+  m_Name: TestSword
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 21300000, guid: 54e656b041896dd4394a13941d771dc5, type: 3}
+  itemName: testSword
+  modelPrefab: {fileID: 3699970308349555993, guid: ec195ecb92e8ff149aa2eaf36c59f681, type: 3}
+  isUnarmed: 0
+  RightHand_Idle_01: RightHand_Idle_01
+  LeftHand_Idle_01: LeftHand_Idle_01
+  OH_LightAttack_1: OH_LightAttack_1
+  OH_LightAttack_2: OH_LightAttack_2
+  OH_HeavyAttack_1: OH_HeavyAttack_1
+  isSpellCaster: 0
+  isMeleeWeapon: 1
+  baseStamina: 20
+  lightAttackMultiplier: 1
+  heavyAttackMultiplier: 2

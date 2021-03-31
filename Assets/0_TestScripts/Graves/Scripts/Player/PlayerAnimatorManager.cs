@@ -8,6 +8,7 @@ namespace project_WAST
     public class PlayerAnimatorManager : MonoBehaviour
     {
         public Animator animator;
+        public AnimatorOverrideController animatorOverrideController;
         InputHandler inputHandler;
         PlayerManager playerManager;
         PlayerLocomotion playerLoc;
@@ -16,13 +17,15 @@ namespace project_WAST
         private void Awake()
         {
             playerManager = GetComponentInParent<PlayerManager>();
-            animator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();          
             inputHandler = GetComponentInParent<InputHandler>();
             playerLoc = GetComponentInParent<PlayerLocomotion>();
         }
 
         private void Start()
         {
+            animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);            
+            animator.runtimeAnimatorController = animatorOverrideController;
         }
 
         public void UpdateAnimatorValues(string getString,float getValue,bool getBool)
@@ -68,6 +71,16 @@ namespace project_WAST
             animator.CrossFade(targetAnim,0.15f);
         }
 
+        public void EnableCombo() //bunlar animasyona event olarak koyuluyor //bunlar animasyona event olarak koyuluyor***************
+        {
+            animator.SetBool("canDoCombo", true);
+        }
+
+        public void DisableCombo() //bunlar animasyona event olarak koyuluyor //bunlar animasyona event olarak koyuluyor**************
+        {
+            animator.SetBool("canDoCombo", false);
+        }
+
         private void OnAnimatorMove() //silince animasyon player posdan cikiyor silme ***************
         {
             if (!playerManager.inAnim || playerManager.isPushPull)
@@ -80,7 +93,6 @@ namespace project_WAST
             Vector3 velocity = deltaPos / Time.deltaTime;
 
             playerLoc.cController.Move(velocity * Time.deltaTime);
-
         }
     }
 }

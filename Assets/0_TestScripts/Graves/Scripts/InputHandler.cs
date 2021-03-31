@@ -11,7 +11,9 @@ namespace project_WAST
         PlayerControls playerControls;
         PlayerAttackManager attackManager;
         PlayerInventory playerInventory;
+        PlayerManager playerManager;
 
+        [Header("Movement Inputs")]
         public Vector2 movementInput;
         public float moveAmount;
         public float verticalInput;
@@ -19,85 +21,65 @@ namespace project_WAST
         public float mouseX;
         public float mouseY;
 
-        public bool rb_Input;
-        public bool rt_Input;
-        public bool b_Input;
-        public bool spaceKey;
-
-        public bool rollFlag;
-        public float rollInputTimer;
+        [Header("Buttons")]
+        public bool a_Input;     //F_KEY       //INTERACT func     //intPress bagli lateupdate falselaniyor 
+        public bool b_Input;     //Shift_KEY   //ROLL AND RUN funcs
+        public bool rb_Input;    //H_KEY       //LIGHT ATTACK func
+        public bool rt_Input;    //U_KEY       //HEAVY ATTACK func
+        public bool dPad_Up;     //suan Arrow_Up ama R_Key ya da T_Key gidecek   //SPELL OR ITEM SWITCH
+        public bool dPad_Down;   //suan Arrow_Down ama R_Key ya da T_Key gidecek  //SPELL OR ITEM SWITCH
+        public bool dPad_Left;   //Q_KEY       //SWITCK LEFT WEAPON QUICK SLOT
+        public bool dPad_Right;  //E_KEY       //SWITCK RIGHT WEAPON QUICK SLOT
+        public bool spaceKey;    //Space_KEY   //PUSH AND CLIMB funcs  //climb suan askida
+   
+        [Header("Flags")]     
+        public bool rollFlag;   
         public bool sprintFlag;   
         public bool pushPullFlag;
         public bool climbFlag;
-        public bool wallRunFlag;
+        public bool comboFlag;
 
-        public bool f_Key;
-        public bool interactFlag;
+        [Header("Interactable F key vs")]
+        public bool f_Key_Press;
+        public bool f_Key_Release;
 
-        public bool intPress;
-        public bool intRelease;
-        public bool interact;
+        private float rollInputTimer;
 
         private void Awake()
         {
+            playerManager = GetComponent<PlayerManager>();
             attackManager = GetComponentInChildren<PlayerAttackManager>();
             playerInventory = GetComponent<PlayerInventory>();
         }
 
-        private void OnEnable()
-        {
-            if(playerControls==null)
-            {
-                playerControls = new PlayerControls();
-                playerControls.PlayerMovement.Movement.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
-            }
-            playerControls.Enable();
-        }
-
-        private void OnDisable()
-        {
-            playerControls.Disable();
-        }
-
-        public void HandleAllInputs()
+        public void HandleAllInputs() //CONTROL BY PLAYERMANAGER SC
         {
             HandleIntreaction();
             HandleMovementInput();
             HandleRollInput();
             HandlePushPullInput();
             HandleAttackInput();
-            //HandleWallRunInput();//askida//askida
+            HandleQuickSlotInput();
         }
 
         private void HandleIntreaction()
         {
-            intPress = Keyboard.current.fKey.wasPressedThisFrame;
-            intRelease = Keyboard.current.fKey.wasReleasedThisFrame;
-
-            if(intPress)
-            {
-                interactFlag = true;
-            }
-            else if(intRelease)
-            {
-                interactFlag = false;
-            }
-          
+            f_Key_Press = Keyboard.current.fKey.wasPressedThisFrame;        
+            a_Input = f_Key_Press;
+            f_Key_Release = Keyboard.current.fKey.wasReleasedThisFrame;
         }
-
         private void HandleMovementInput()
         {
             verticalInput = movementInput.y;
             horizontalInput = movementInput.x;
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));          
         }
-
         private void HandleRollInput()
         {
             b_Input = playerControls.PlayerActions.Roll.phase == UnityEngine.InputSystem.InputActionPhase.Started; //WTF?????
 
             if (b_Input)
-            {
+            {               
                 rollInputTimer += Time.deltaTime;
                 sprintFlag = true;
             }
@@ -112,7 +94,6 @@ namespace project_WAST
                 rollInputTimer = 0;
             }
         }
-
         private void HandlePushPullInput()
         {
             spaceKey = playerControls.PlayerActions.PushPull.phase == UnityEngine.InputSystem.InputActionPhase.Started; //WTF?????
@@ -131,49 +112,65 @@ namespace project_WAST
                 climbFlag = false;
             }
         }
-
         private void HandleAttackInput()
         {
-
-            playerControls.PlayerActions.RB_Input.performed += ctx => rb_Input = true;
-            playerControls.PlayerActions.RT_Input.performed += ctx => rt_Input = true;
-
             if(rb_Input)
             {
-                attackManager.HandleLightAttack(playerInventory.rightWeapon);
-                Debug.Log("rb basildi");
+                if (playerManager.inAnim)
+                {
+                    return;
+                }
+
+                Debug.Log("rb icindeyiz");
+                attackManager.PerformRBSpellAction(playerInventory.rb_Spell);
+
             }
 
-            if(rt_Input)
+            if (rt_Input)
             {
-                attackManager.HandleHeavyAttack(playerInventory.rightWeapon);
-                Debug.Log("rt basildi");
+                if (playerManager.inAnim)
+                {
+                    return;
+                }
+                Debug.Log("rt icindeyiz");
+                attackManager.PerformRTSpellAction(playerInventory.rt_Spell);
             }
+        }
+        private void HandleQuickSlotInput()
+        {
+            playerControls.PlayerQuickSlots.DpadRight.performed += ctx => dPad_Right = true;
+            playerControls.PlayerQuickSlots.DpadLeft.performed += ctx => dPad_Left = true;
+            playerControls.PlayerQuickSlots.DpadUp.performed += ctx => dPad_Up = true;
+            playerControls.PlayerQuickSlots.DpadDown.performed += ctx => dPad_Down = true;
 
-            /*rb_Input = Keyboard.current.vKey.wasPressedThisFrame;
-
-            if (rb_Input)
+            if (dPad_Right)
             {
-                attackManager.HandleRBAction();
-            }*/
+                playerInventory.SwitchToNextWeapon(false);
+            }
+            else if(dPad_Left)
+            {
+                playerInventory.SwitchToNextWeapon(true);
+            }
+        } 
+
+
+        #region onEnable / onDisable
+        private void OnEnable()
+        {
+            if (playerControls == null)
+            {
+                playerControls = new PlayerControls();
+                playerControls.PlayerMovement.Movement.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
+                playerControls.PlayerActions.RB_Input.performed += ctx => rb_Input = true;
+                playerControls.PlayerActions.RT_Input.performed += ctx => rt_Input = true;
+            }
+            playerControls.Enable();
+        }
+        private void OnDisable()
+        {
+            playerControls.Disable();
         }
 
-        private void HandleSpellInputs()
-        {
-          
-        }
-
-        private void HandleWallRunInput()
-        {
-            if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A))
-            {
-                wallRunFlag = true;
-            }
-            else
-            {
-                wallRunFlag=false;
-            }
-        } //askida//askida
-
+        #endregion
     }
 }

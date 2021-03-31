@@ -6,14 +6,16 @@ namespace project_WAST
 {
     public class WeaponHandlerManager : MonoBehaviour
     {
+        PlayerAnimatorManager animatorManager;
         WeaponHandler leftHandSlot;
         WeaponHandler rightHandSlot;
-
-        public DamageCollider leftDamageCollider;
-        public DamageCollider rightDamageCollider;
-
+        UI_QuickSlots quickSlots;
+ 
         private void Awake()
         {
+            animatorManager = GetComponent<PlayerAnimatorManager>();
+            quickSlots = FindObjectOfType<UI_QuickSlots>();
+
             WeaponHandler[] weaponSlots = GetComponentsInChildren<WeaponHandler>();
 
             foreach(WeaponHandler weaponSlot in weaponSlots)
@@ -29,65 +31,50 @@ namespace project_WAST
             }
         }
 
-        public void LoadWeaponOnSlot(WeaponItem weaponItem,bool isLeft)
+        public void LoadWeaponOnSlot(SpellItem spellItem,bool isRB_Spell)
         {
-            if(isLeft)
+            if(isRB_Spell)
             {
-                leftHandSlot.LoadWeaponModel(weaponItem);
-                leftDamageCollider = LoadDamageCollider(leftHandSlot);
-              
+                leftHandSlot.LoadWeaponModel(spellItem);
+                quickSlots.UpdateWeaponSlotUI(true, spellItem);     ////quick slotlarda degisiklik yapilacak onemliiiiii******
+
+                if(spellItem != null) //handle left weapon idle animations
+                {
+                   
+                    animatorManager.animatorOverrideController["RB_Spell"] = spellItem.spellClip;
+                }
+                else
+                {
+                    animatorManager.animator.CrossFade("LeftArmEmpty",0.2f);
+                }              
             }
             else
             {
-                rightHandSlot.LoadWeaponModel(weaponItem);
-                rightDamageCollider = LoadDamageCollider(rightHandSlot);
+                rightHandSlot.LoadWeaponModel(spellItem);
+                quickSlots.UpdateWeaponSlotUI(false, spellItem);
+
+                if (spellItem != null) //handle right  weapon idle animations
+                {
+                    animatorManager.animatorOverrideController["RT_Spell"] = spellItem.spellClip;
+                }
+                else
+                {
+                    animatorManager.animator.CrossFade("RightArmEmpty", 0.2f);
+                }
             }
         }
 
-        private DamageCollider LoadDamageCollider(WeaponHandler currentHandSlot)
+        #region Stamina Set
+        public void DrainStaminaLightAttack()
         {
-            DamageCollider findCollider=currentHandSlot.currentWeaponModel.GetComponentInChildren<DamageCollider>();
-
-            Debug.Log(findCollider.currentWeaponDamage);
-            return findCollider;
+            //playerRefs.TakeStaminaDamage(Mathf.RoundToInt(attackingWeapon.baseStamina * attackingWeapon.lightAttackMultiplier));
         }
 
-        
-
-        public void SetOnLeftDamageCollider()
+        public void DrainStaminaHeavyAttack()
         {
-            leftDamageCollider.EnableDamageCollider();
+            //playerRefs.TakeStaminaDamage(Mathf.RoundToInt(attackingWeapon.baseStamina * attackingWeapon.heavyAttackMultiplier));
         }
 
-        public void SetOnRightDamageCollider()
-        {
-            rightDamageCollider.EnableDamageCollider();
-        }
-
-        public void CloseLeftHandDamageCollider()
-        {
-            leftDamageCollider.DisableDamageCollider();
-        }
-
-        public void CloseRightHandDamageCollider()
-        {
-            rightDamageCollider.DisableDamageCollider();
-        }
-
-
-        /*
-        private void LoadLeftHandDamageCollider()
-        {
-            leftDamageCollider = leftHandSlot.currentWeaponModel.GetComponentInChildren<DamageCollider>();
-        }
-
-        private void LoadRightHandDamageCollider()
-        {
-            rightDamageCollider = rightHandSlot.currentWeaponModel.GetComponentInChildren<DamageCollider>();
-        }*/
-
-
-
-
+        #endregion
     }
 }

@@ -8,8 +8,8 @@ namespace project_WAST
     {
         InputHandler inputHandler;
         PlayerLocomotion playerLocomotion;
+        PlayerAnimatorManager animatorManager;
         PlayerInteractor playerInteractor;
-        Animator anim;
 
         public bool inAnim;
         [Header("Player Flags")]
@@ -26,7 +26,7 @@ namespace project_WAST
         private void Awake()
         {
             inputHandler = GetComponent<InputHandler>();
-            anim = GetComponentInChildren<Animator>();
+            animatorManager = GetComponentInChildren<PlayerAnimatorManager>();
             playerLocomotion = GetComponent<PlayerLocomotion>();
             playerInteractor = GetComponent < PlayerInteractor >();
         }
@@ -34,30 +34,36 @@ namespace project_WAST
         private void Update()
         {
             inputHandler.HandleAllInputs();
-            inAnim = anim.GetBool("inAnim");
             playerLocomotion.HandleAllMovement();
+            inAnim = animatorManager.animator.GetBool("inAnim");
+            canDoCombo = animatorManager.animator.GetBool("canDoCombo");
         }
 
         private void FixedUpdate()
         {
             playerLocomotion.HandleAllFixed();
-            playerInteractor.HandleFixedInteractors();
         }
 
         private void LateUpdate()
         {
+            inputHandler.a_Input = false;
+            inputHandler.rb_Input = false;
+            inputHandler.rt_Input = false;
+            inputHandler.dPad_Up = false;
+            inputHandler.dPad_Down = false;
+            inputHandler.dPad_Right = false;
+            inputHandler.dPad_Left = false;
+
             inputHandler.rollFlag = false;
             inputHandler.sprintFlag = false;
             inputHandler.pushPullFlag = false;
-            inputHandler.climbFlag = false;
-            inputHandler.rb_Input = false;
-            inputHandler.rt_Input = false;
-            inputHandler.wallRunFlag = false;
+            inputHandler.climbFlag = false;        
             
             if (isInAir)
             {
                 playerLocomotion.inAirTimer += Time.deltaTime;      
             }
         }
+
     }
 }

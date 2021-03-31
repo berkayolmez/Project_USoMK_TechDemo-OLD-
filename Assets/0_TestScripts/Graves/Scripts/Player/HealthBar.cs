@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace project_WAST
 { 
-    public class HealthBar : MonoBehaviour
+    public class HealthBar : MonoBehaviour //stamina ve healthbaricin ayný sey kullanilabilir
     {
         public Slider healthSlider;
 

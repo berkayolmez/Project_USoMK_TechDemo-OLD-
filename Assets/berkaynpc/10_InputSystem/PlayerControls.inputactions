@@ -148,14 +148,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Interaction",
-                    "type": "Button",
-                    "id": "e3447d11-daf3-47f7-bc4e-25817a4e5790",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "SpellCast",
                     "type": "Button",
                     "id": "f0037787-1de2-4fc8-95b9-50cfb96d0533",
@@ -216,17 +208,6 @@
                 },
                 {
                     "name": "",
-                    "id": "dbf2f323-704a-457f-bd57-4ab64f4523c2",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interaction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "eaca085d-34a6-40b2-9fc6-a0d3be28d764",
                     "path": "<Keyboard>/v",
                     "interactions": "",
@@ -239,7 +220,7 @@
                 {
                     "name": "",
                     "id": "58639d82-74c9-45a3-91a7-4a11357de447",
-                    "path": "<Keyboard>/h",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -250,11 +231,139 @@
                 {
                     "name": "",
                     "id": "306624f0-908d-4b76-97c3-e7f24ac4b0f4",
-                    "path": "<Keyboard>/u",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "RT_Input",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PlayerQuickSlots",
+            "id": "5420749a-4e8a-46df-bb71-2e50b4f24c00",
+            "actions": [
+                {
+                    "name": "DpadUp",
+                    "type": "Button",
+                    "id": "a46c08c9-7a69-48bc-b0ac-4b2a16358333",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "DpadDown",
+                    "type": "Button",
+                    "id": "7b3a3742-0625-4bdf-a933-213ff4f05229",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "DpadRight",
+                    "type": "Button",
+                    "id": "8fe1d40e-1b40-478a-bee6-4f2147758936",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "DpadLeft",
+                    "type": "Button",
+                    "id": "2f38be88-d8c3-4645-8bdb-2e5305a2334f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e847aa28-c70f-4429-a95a-9ec4a00c59f5",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DpadUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8fddafa3-498e-4bf5-8b5c-71f8ab89facc",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DpadUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "16c6e20e-0a7d-45a1-a9b4-1845e7f06bb7",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DpadDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5907f212-6f5f-4070-8dcb-f425d85735e9",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DpadDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b6670511-3cc0-44ea-a60b-d9886b893577",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DpadRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aa489f9c-c355-467a-a377-d8f1a7fc186f",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DpadRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e3cc202-92f1-4d77-bf48-df95dc4cc9c8",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DpadLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "90a10e94-00b8-4ad2-84a5-fb39d44393db",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DpadLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

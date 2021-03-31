@@ -27,19 +27,20 @@ namespace project_WAST
             }
         }
 
-        public void LoadWeaponModel(WeaponItem weapon)
+        public void LoadWeaponModel(SpellItem spell)
         {
             UnloadWeapon(true); //unload and destory
 
-            if (weapon==null)
+            if (spell==null)
             {
                 UnloadWeapon(false); //just unload
                 return;
             }
 
-            if(weapon.modelPrefab!=null)
+            
+            if(spell.modelPrefab!=null)
             {
-                GameObject model = Instantiate(weapon.modelPrefab) as GameObject;
+                GameObject model = Instantiate(spell.modelPrefab) as GameObject;
 
                 if (model != null)
                 {
@@ -59,7 +60,7 @@ namespace project_WAST
 
                 currentWeaponModel = model;
             }
-
+            
            
         }
 

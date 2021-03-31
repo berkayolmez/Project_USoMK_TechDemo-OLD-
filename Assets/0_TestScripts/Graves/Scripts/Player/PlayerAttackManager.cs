@@ -8,92 +8,85 @@ namespace project_WAST
     {
         PlayerAnimatorManager animatorManager;
         PlayerInventory playerInventory;
-        PlayerManager playerManager;        
+        PlayerManager playerManager;
+        FieldOfView playerFov;
+        WeaponHandlerManager weaponManager;
+        InputHandler inputHandler;
 
+        [Header("Attack Things")] //ismi degistir
+        public string lastAttack;
         public LayerMask spellMask;
         [SerializeField] private Transform rightHolder;
+
+        public bool canUseRB = true;
 
         private void Awake()
         {
             playerManager=GetComponentInParent<PlayerManager>();
             playerInventory = GetComponentInParent<PlayerInventory>();
             animatorManager = GetComponent <PlayerAnimatorManager>();
-            //weaponManager = GetComponent<WeaponHandlerManager>();
+            playerFov = GetComponent<FieldOfView>();
+            weaponManager = GetComponent<WeaponHandlerManager>();
+            inputHandler = GetComponentInParent<InputHandler>();
+        }
+
+        private void Start()
+        {
+            canUseRB = true;
         }
 
         public void HandleWeaponCombo(WeaponItem weapon)
         {
-
+            if(inputHandler.comboFlag)
+            {
+                animatorManager.animator.SetBool("canDoCombo", false);
+                if (lastAttack == weapon.OH_LightAttack_1)
+                {
+                    animatorManager.PlayTargetAnimation(weapon.OH_LightAttack_2, true);
+                }
+            }
         }
+        /*
         public void HandleLightAttack(WeaponItem weapon)
         {
-           animatorManager.PlayTargetAnimation(weapon.OH_LightAttack_1, true);
+            weaponManager.attackingWeapon = weapon;
+            animatorManager.PlayTargetAnimation(weapon.OH_LightAttack_1, true);
+            lastAttack = weapon.OH_LightAttack_1;
         }
         public void HandleHeavyAttack(WeaponItem weapon)
         {
+            weaponManager.attackingWeapon = weapon;
             animatorManager.PlayTargetAnimation(weapon.OH_HeavyAttack_1, true);
+            lastAttack = weapon.OH_HeavyAttack_1;
+        }
+        */
+
+        public void PerformRBSpellAction(SpellItem spell)
+        {
+            if (playerInventory.rb_Spell != null)
+            {
+                //check for FP
+                playerInventory.currentSpell = playerInventory.rb_Spell;
+                playerInventory.rb_Spell.AttemptToCastSpell(animatorManager,false);
+                //attempt to cast spell
+            }            
         }
 
-        //input actions
-        public void HandleRBAction()
+        public void PerformRTSpellAction(SpellItem spell)
         {
-            if (animatorManager.animator.GetBool("inAnim"))
+            if (playerInventory.rt_Spell != null)
             {
-                return;
-            }
+                //check for FP
+                playerInventory.currentSpell = playerInventory.rt_Spell;
+                playerInventory.rt_Spell.AttemptToCastSpell(animatorManager,true);
 
-            if(playerInventory.rightWeapon.isMeleeWeapon)
-             {
-                 //handle Melee
-                 PerformRBMeleeAction();
-            }
-            else if (playerInventory.rightWeapon.isSpellCaster) //bunun yerine tek bir bool gelebilir******
-            {
-                //magic action
-                PerformRBSpellAction(playerInventory.rightWeapon);
-            }
-
-        }
-      
-        // attac actions>
-        private void PerformRBMeleeAction()
-        {
-
-            if (playerManager.canDoCombo)
-            {
-                //comboFlag = true;
-                // HandleWeaponCombo(playerInventory.rightWeapon);
-                //comboFlag = false;
-            }
-            else
-            {
-                if (playerManager.inAnim || playerManager.canDoCombo)
-                {
-                    return;
-                }
-
-                //animatorManager.animator.SetBool("isUsingRightHand", true);
-                //HandleLightAttack(playerInventory.rightWeapon);
-
-            }
-        }
-
-        private void PerformRBSpellAction(WeaponItem weapon)
-        {
-            if(weapon.isSpellCaster)
-            {
-                if(playerInventory.currentSpell!=null)
-                {
-                    //check for FP
-                    playerInventory.currentSpell.AttemptToCastSpell(animatorManager);
-                    //attempt to cast spell
-                }
+                //attempt to cast spell
             }
         }
 
         private void SuccesfullyCastSpell() //animasyonda çaðýrýyoruz bunu
         {
-            //playerInventory.currentSpell.SuccesfullyCastSpell(animatorManager, rightHolder,transform, spellMask); //spell buradan tetikleniyor          
+            playerInventory.currentSpell.SuccesfullyCastSpell(rightHolder,transform, spellMask); //spell buradan tetikleniyor          
             //force buraya gelecek bir de spell fx durmuyor durdur
         }
 
