@@ -19,6 +19,7 @@ namespace project_WAST
         private Ray ray;
         private RaycastHit hit;
         private float remaininLength;
+
         [SerializeField] private float maxLength;
 
         [Header("Requirement Type")]                                          //REQUIREMENT TYPE

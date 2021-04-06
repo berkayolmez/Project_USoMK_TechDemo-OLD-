@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace project_WAST
-{
+{/*
     public class SpeedBoost : MonoBehaviour ///////hýzlanmada sýkýntý var onu çöz bir anda hýzlanýyor ya da yavaþlýyor ************
     {
         private MyFunctions myFunctions = new MyFunctions();
-        PlayerMovementController playerController;
 
         [Header("Booster Type")]
         [SerializeField] BoosterTypes boosterType;
@@ -139,12 +138,12 @@ namespace project_WAST
                         yield break;
                     }
                 }
-                playerController.speed = currentSpeed;
+               // playerController.speed = currentSpeed;
 
                 yield return new WaitForFixedUpdate(); //dýþarýda olabilir bunu kontrol et***** //fixed yerine null olabilir kontrol et****
             }
             yield break;        
         }
 
-    }
+    }*/
 }

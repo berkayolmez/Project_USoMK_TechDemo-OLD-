@@ -5,7 +5,6 @@ public class RequirementTypes : MonoBehaviour
     // [Flags]  //þuan çalýþmýyor çare bulunca eklenecek. eþleþtirme red,blue arýyor. ayrý ayrý görmüyor split ile belki çözülebilir
 
     #region Global Req Types
-    [SerializeField] RequirementType reqType;
     public enum RequirementType
     {
         nothing,
@@ -19,11 +18,6 @@ public class RequirementTypes : MonoBehaviour
         CubeGreen,
         CubeBlue,
         //daha fazla þey eklenebilir
-    }
-
-    public RequirementType GetKeyType()
-    {
-        return reqType;
     }
     #endregion
 

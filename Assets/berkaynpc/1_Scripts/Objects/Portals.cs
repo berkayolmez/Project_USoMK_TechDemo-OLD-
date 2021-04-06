@@ -53,7 +53,6 @@ namespace project_WAST
         {
             if(inObjs!=null && isButtonOn)
             {
-              //  Debug.Log("sex");
                 if (inObjs.CompareTag("Player"))
                 {
                     CharacterController cc = inObjs.GetComponent<CharacterController>();
@@ -62,7 +61,6 @@ namespace project_WAST
                     cc.enabled = true;
                     inObjs = null;
 
-                    //Debug.Log("sex2222");
                 }
                 else if (inObjs.CompareTag("MoveObj")) //daha güzel yöntem bulunabilir*********
                 {
@@ -109,6 +107,7 @@ namespace project_WAST
             if (other.CompareTag("Player"))
             {
                 inObjs = null;
+                Debug.Log("deneme");
                 // inObjs.Remove(other.gameObject);
             }
 

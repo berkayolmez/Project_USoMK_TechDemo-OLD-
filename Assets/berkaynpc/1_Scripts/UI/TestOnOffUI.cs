@@ -65,10 +65,7 @@ namespace project_WAST
                 else
                 {
                     thisTextUI.color = Color.red;
-                }
-
-            
-
+                }   
             }
             else
             {

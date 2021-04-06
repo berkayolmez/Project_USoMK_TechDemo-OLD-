@@ -27,8 +27,7 @@ namespace project_WAST
             {
                 if (other.CompareTag("Player"))
                 {
-                     PlayerLocomotion playerController = other.GetComponent<PlayerLocomotion>();
-
+                    PlayerLocomotion playerController = other.GetComponent<PlayerLocomotion>();
                     if (playerController != null && launchWay != null)
                     {
                         if(duration!=0)
@@ -37,7 +36,7 @@ namespace project_WAST
                         }
 
                         playerController.HandleAddImpact(launchWay.right,force);
-
+                 
                         // playerController.velocity = launchWay.right * force;
                         //playerController.isJumping = true;
                         //cController.Move(launchWay.right * force);

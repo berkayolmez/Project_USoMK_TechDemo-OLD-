@@ -23,6 +23,7 @@ namespace project_WAST
         public void Reflect(bool getBool, float getLaserLength)
         {
             //Debug.Log("aaaa " + this.gameObject.name);
+            laserDetectorStatus = getBool;
             myFunctions.SetMyConnectedObjects(connectedGameObjs, getBool);
         }
 

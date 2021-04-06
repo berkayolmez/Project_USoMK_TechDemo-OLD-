@@ -385,7 +385,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169269527900187956}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.0000000018626}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 169269528266883580}
@@ -393,7 +393,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.1363, y: -2.94}
+  m_AnchoredPosition: {x: 0.13629901, y: -2.1562502}
   m_SizeDelta: {x: 2.5795, y: 0.4581}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &169269527900187953
@@ -759,9 +759,9 @@ GameObject:
   - component: {fileID: 169269528616869303}
   - component: {fileID: 169269528616869304}
   - component: {fileID: 169269528616869305}
-  - component: {fileID: 169269528616869306}
   - component: {fileID: 169269528616869309}
   - component: {fileID: 169269528616869308}
+  - component: {fileID: 3143957763418243191}
   m_Layer: 0
   m_Name: HoldUpButton
   m_TagString: Untagged
@@ -776,7 +776,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169269528616869311}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.798271, y: -0.004999999, z: -0.030999618}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1056,20 +1056,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169269528616869311}
   m_Mesh: {fileID: 0}
---- !u!64 &169269528616869306
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169269528616869311}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!114 &169269528616869309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1082,15 +1068,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afaf62d0eff890f4f911bcc1bf672b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holdButtonStatus: 1
+  holdButtonStatus: 0
   isAreaEmpty: 1
   buttonType: 0
   reqType: 0
   myLogicGateType: 0
-  loadingText: {fileID: 169269529169600246}
-  timerText: {fileID: 169269527438727590}
-  timerSlider: {fileID: 169269528816091445}
-  circle: {fileID: 169269527404766475}
   loadingValue: 0
   maxLoadingValue: 1
   timerSpeed: 10
@@ -1112,6 +1094,22 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.8387724
   m_Center: {x: -1.9975457, y: 0.01, z: 0}
+--- !u!114 &3143957763418243191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169269528616869311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5b6bb24fbd19b743aab34c0cdeed350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadingText: {fileID: 169269529169600246}
+  timerText: {fileID: 169269527438727590}
+  timerSlider: {fileID: 169269528816091445}
+  circle: {fileID: 169269527404766475}
 --- !u!1 &169269528670465572
 GameObject:
   m_ObjectHideFlags: 0

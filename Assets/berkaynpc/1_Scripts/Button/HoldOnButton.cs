@@ -11,7 +11,7 @@ namespace project_WAST
         private MyFunctions myFunctions = new MyFunctions();
 
         [Header("My Status (True/False)")] // THIS BUTTON'S STATUS
-        [SerializeField] private bool holdButtonStatus = true;
+        public bool holdButtonStatus = true;
         public bool myStatus => holdButtonStatus;
         [SerializeField] private bool isAreaEmpty = true;
         private bool resetAreaStatus=false;
@@ -33,18 +33,12 @@ namespace project_WAST
         RequirementTypes.RequirementType IHold.reqType => reqType;        //Interface reading key type  
 
         [Header("Gate Type")]
-        [SerializeField] private MyFunctions.LogicGateType myLogicGateType;
-
-        [Header("UI Objects")]  //UI for demo 
-        [SerializeField] private TextMeshProUGUI loadingText;  
-        [SerializeField] private TextMeshProUGUI timerText;
-        [SerializeField] private Slider timerSlider;
-        [SerializeField] private Image circle;
+        [SerializeField] private MyFunctions.LogicGateType myLogicGateType;       
 
         [Header("Values")]
-        [SerializeField]  private float loadingValue = 0;
+        public float loadingValue = 0;
         [SerializeField] private float maxLoadingValue = 1;
-        [SerializeField]  private float timerSpeed = 1;
+        public float timerSpeed = 1;
         [SerializeField] private int onObjectCount; //butona basanlarýn toplam sayýsý
 
         [Header("Connected Objects And Butons")]
@@ -53,11 +47,7 @@ namespace project_WAST
         [SerializeField] private bool controllerStatus;                   // CHECK ALL CONNECTED BUTTONS
         [SerializeField] private GameObject[] resetController; //silinebilir kontrol et bunu
 
-        private void Awake() //Starting settings
-        {
-            loadingText.text = "LOADING: %0";
-            timerSlider.value = timerSpeed;  
-        }
+   
 
         private void Update()
         {
@@ -67,15 +57,13 @@ namespace project_WAST
                     if (!isAreaEmpty && !holdButtonStatus && loadingValue <= 1)
                     {
                         loadingValue = myFunctions.Loader(timerSpeed * 0.01f, maxLoadingValue);
-                        circle.fillAmount = loadingValue;
-                        loadingText.text = "LOADING: %" + (loadingValue * 100).ToString("F0");
+                     
                         if (loadingValue >= 1)
                         {
                             myFunctions.loadingValue = 0;
                             holdButtonStatus = true;
                             loadingValue = 1;
                             PressedMe(holdButtonStatus);
-                            //CmdDo();
                         }
                     }
                     break;
@@ -85,22 +73,17 @@ namespace project_WAST
                     if(!isAreaEmpty && !holdButtonStatus && loadingValue<=1)
                     {
                         loadingValue = myFunctions.Loader(timerSpeed * 0.01f, maxLoadingValue);
-                        circle.fillAmount = loadingValue;
-                        loadingText.text = "LOADING: %" + (loadingValue * 100).ToString("F0");
                         if (loadingValue >= 1)
                         {
                             myFunctions.loadingValue = 0;
                             holdButtonStatus = true;
                             loadingValue = 1;
                             PressedMe(holdButtonStatus);
-                            //CmdDo();
                         }
                     }
                     else if (isAreaEmpty && !holdButtonStatus && loadingValue > 0)
                     {
                         loadingValue = myFunctions.Loader(-timerSpeed * 0.01f, maxLoadingValue);
-                        circle.fillAmount = loadingValue;
-                        loadingText.text = "LOADING: %" + (loadingValue * 100).ToString("F0");
 
                         if (loadingValue <= 0)
                         {
@@ -110,30 +93,15 @@ namespace project_WAST
                     break;
 
                 case ButtonType.StayOn:
-                    if (isAreaEmpty && circle.fillAmount > 0)
+                    if (isAreaEmpty)
                     {
                         holdButtonStatus = false;
-                        circle.fillAmount = 0;
-                        loadingText.text = "LOADING: %" + (loadingValue * 100).ToString("F0");
+                        loadingValue = 0;
                         ResetValues();
                     }
                     break;
             }
         }
-
-        /*
-        [Command(ignoreAuthority = true)]
-        private void CmdDo()
-        {
-            RpcDo();
-        }
-
-        [ClientRpc]
-        private void RpcDo()
-        {  
-            myFunctions.SetMyConnectedObjects(connectedGameObjs, true);   
-        }
-        */
 
         public void Holding()
         {
@@ -143,8 +111,7 @@ namespace project_WAST
 
             if (controllerStatus && onObjectCount<=1)
             {
-                isAreaEmpty = false;
-               
+                isAreaEmpty = false;               
 
                 switch (buttonType)
                 {
@@ -153,24 +120,18 @@ namespace project_WAST
 
                         if(holdButtonStatus)
                         {
-                            circle.fillAmount = 1;
+                            loadingValue = 1;
                         }
                         else
                         {
-                            circle.fillAmount = 0;
+                            loadingValue = 0;
                         }
                         break;
 
                     case ButtonType.StayOn:
-                      circle.fillAmount = 1;
-                        holdButtonStatus = true;                       
-                    //  CmdDo();                       
-                        break;
-
-                    case ButtonType.StepAndHold:
-                    case ButtonType.StayAndHold:
-                                     
-                        break;                    
+                        loadingValue = 1;
+                        holdButtonStatus = true;           
+                        break;             
                 }
               
                 PressedMe(holdButtonStatus);
@@ -198,22 +159,12 @@ namespace project_WAST
             myFunctions.SetMyConnectedObjects(connectedGameObjs, getBool);
         }
 
-
-        public void SetTimerSpeed()
-        {
-            timerSpeed = timerSlider.value;
-            timerText.text = "TIMER: " + timerSpeed.ToString("F0");
-        }
-
         public void ResetValues()
         {
             holdButtonStatus = false;
             loadingValue = 0;
             myFunctions.loadingValue = 0;
-            circle.fillAmount = 0;
-            loadingText.text = "LOADING: %" + (loadingValue * 100).ToString("F0");
-
-            controllerStatus = false; //reset ui        
+            controllerStatus = false;     
             myFunctions.SetMyConnectedObjects(connectedGameObjs, false);
         }
 

@@ -29,8 +29,10 @@ namespace project_WAST
         InputHandler inputHandler;
         PickableUI pickableUI;
         PlayerManager playerManager;
+        PlayerInventory playerInventory;
         PlayerAnimatorManager animatorManager;
         public event EventHandler KeyChange;  
+        
         [HideInInspector]
         public GameObject[] interactorObjs; 
 
@@ -40,19 +42,14 @@ namespace project_WAST
         [Header("Variables")]     
         public bool canInteract =true;        
         [SerializeField] private float pickUItimer=4;
-        [SerializeField] private List<RequirementTypes.RequirementType> requirementList;
-        public List<RequirementTypes.RequirementType> GetKeyList()
-        {
-            return requirementList;
-        }
+
 
         private void Awake()
         {
             inputHandler = GetComponent<InputHandler>();
             animatorManager = GetComponentInChildren<PlayerAnimatorManager>();
             playerManager = GetComponent<PlayerManager>();
-            requirementList = new List<RequirementTypes.RequirementType>();
-            requirementList.Add(RequirementTypes.RequirementType.nothing); //karakterin bütün butonlarla etkileþimi iiçin bla bla bu yazýyý düzelt 
+            playerInventory = GetComponent<PlayerInventory>();
         }
 
         private void Start()
@@ -67,7 +64,7 @@ namespace project_WAST
 
         private void OnTriggerStay(Collider other)
         {
-            RequirementTypes key = other.GetComponent<RequirementTypes>(); //req olarak deðiþtir
+            RequirementKeys key = other.GetComponent<RequirementKeys>(); //req olarak deðiþtir
 
             if (key != null)
             {
@@ -75,12 +72,13 @@ namespace project_WAST
                 Destroy(key.gameObject);
             }
 
-            if(inputHandler.f_Key_Press && canInteract)
-            {               
+
+            if (inputHandler.f_Key_Press && canInteract)
+            {
                 HandlePressInteractable(other, true);
-            }
-            
-            if(inputHandler.f_Key_Release && !canInteract)
+            }          
+
+            if (inputHandler.f_Key_Release && !canInteract)
             {
                 HandlePressInteractable(other, false);
             }
@@ -118,6 +116,7 @@ namespace project_WAST
                 {
                     interactable.StillPress(false);
                     animatorManager.animator.SetBool("isPressing", false);
+                    canInteract = true;
                 }
             }
 
@@ -154,7 +153,7 @@ namespace project_WAST
                     canInteract = false;
                     interactable.Interact();
                     animatorManager.animator.SetBool("isPressing", true);
-                   animatorManager.PlayTargetAnimation("PressEnter", false);
+                    animatorManager.PlayTargetAnimation("PressEnter", false);
                 }
                 else
                 {
@@ -165,6 +164,7 @@ namespace project_WAST
             }
             else
             {
+                canInteract = true;
                 animatorManager.animator.SetBool("isPressing", false);
             }
 
@@ -213,18 +213,18 @@ namespace project_WAST
         {
             if (!ContainsKey(reqType))
             {
-                requirementList.Add(reqType);
+                playerInventory.requirementList.Add(reqType);
                 KeyChange?.Invoke(this, EventArgs.Empty);
             }
         }
         public void DeletKey(RequirementTypes.RequirementType reqType)
         {
-            requirementList.Remove(reqType);
+            playerInventory.requirementList.Remove(reqType);
             KeyChange?.Invoke(this, EventArgs.Empty);
         }
         public bool ContainsKey(RequirementTypes.RequirementType reqType)
         {
-            return requirementList.Contains(reqType);
+            return playerInventory.requirementList.Contains(reqType);
         }
         #endregion
 

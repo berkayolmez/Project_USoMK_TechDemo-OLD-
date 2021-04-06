@@ -49,7 +49,7 @@ namespace project_WAST
 
                     case LogicGateType.ORGate:
 
-                            foreach (var buttons in controllerObjetcs) //bu rpc ye gidebilir ????????
+                            foreach (var buttons in controllerObjetcs) 
                             {
                                 iHaveStatus = buttons.GetComponent<IHaveStatus>();
 
@@ -62,7 +62,7 @@ namespace project_WAST
 
                     case LogicGateType.ANDGate:
                         
-                            foreach (var buttons in controllerObjetcs) //bu rpc ye gidebilir ????????
+                            foreach (var buttons in controllerObjetcs) 
                             {
                                 iHaveStatus = buttons.GetComponent<IHaveStatus>();
 
