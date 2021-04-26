@@ -43,15 +43,19 @@ namespace project_WAST
         [SerializeField] private bool controllerStatus;           // CHECK ALL Controller BUTTONS
 
         private void Start()
-        {
-            controllerStatus = myFunctions.CheckControllerObjects(controllerObjs, myLogicGateType);
+        {        
 
             objMats = GetComponent<Renderer>();
-            startColor = objMats.material.GetColor("_EmissionColor");
+            if(objMats!=null)
+            {
+                startColor = objMats.material.GetColor("_EmissionColor");
+            }
         }
 
         public void SpellInteract(RequirementTypes.SpellElementTypes getSpellElement)
         {
+            controllerStatus = myFunctions.CheckControllerObjects(controllerObjs, myLogicGateType);
+
             if (controllerStatus)
             {
                 if (ContainsElement(getSpellElement))
@@ -60,21 +64,29 @@ namespace project_WAST
                     {
                         case BlockTypes.SimpleInteract:
                             blockStatus=true;
-                            objMats.material.SetColor("_EmissionColor", startColor * 5);
+                            if (objMats != null)
+                            {
+                                objMats.material.SetColor("_EmissionColor", startColor * 5);
+                            }
                             InteractedWithMe(blockStatus);
                             break;
 
                         case BlockTypes.OnOffBlock:
                             blockStatus = !blockStatus;
 
-                            if(blockStatus)
+                            if (objMats != null)
                             {
-                                objMats.material.SetColor("_EmissionColor", startColor * 5);
+                                if (blockStatus)
+                                {
+
+                                    objMats.material.SetColor("_EmissionColor", startColor * 5);
+                                }
+                                else
+                                {
+                                    objMats.material.SetColor("_EmissionColor", startColor * 0.5f);
+                                }
                             }
-                            else
-                            {
-                                objMats.material.SetColor("_EmissionColor", startColor * 0.5f);
-                            }
+                           
                        
                             InteractedWithMe(blockStatus);
 
@@ -85,7 +97,10 @@ namespace project_WAST
             else
             {
                 blockStatus = false;
-                objMats.material.SetColor("_EmissionColor", startColor * 0.5f);
+                if (objMats != null)
+                {
+                    objMats.material.SetColor("_EmissionColor", startColor * 0.5f);
+                }
                 InteractedWithMe(blockStatus);
             }
         }

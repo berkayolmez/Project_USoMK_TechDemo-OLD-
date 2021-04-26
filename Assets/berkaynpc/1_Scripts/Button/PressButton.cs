@@ -64,7 +64,7 @@ namespace project_WAST
             thisAnimator.SetBool("canPress", pressButtonStatus);           //SET THIS BUTTON'S START ANIMATION STATE
         }
          
-        public void Interact()  // Player pressed to F //butonla ilgili sýkýntý var bazen basýyor bazen basmýyor sebebi belli deðil
+        public void Interact()  
         { 
             controllerStatus = myFunctions.CheckControllerObjects(controllerObjs, myLogicGateType);
           

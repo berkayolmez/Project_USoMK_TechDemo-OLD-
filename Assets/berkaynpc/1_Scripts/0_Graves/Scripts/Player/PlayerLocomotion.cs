@@ -24,12 +24,12 @@ namespace project_WAST
 
         [Header("Grounded")]
         public float gravity = -9.81f;
-        [SerializeField] private float gravityY = -1.5f;
+        public float gravityY = -1.5f;
         [SerializeField] private float groundDist = 0.25f;
         [SerializeField] private float groundRad = 0.5f;
         [SerializeField] private LayerMask groundMask;        
         Vector3 gravityDir;
-        private bool canSetGravity;
+        public bool canSetGravity;
 
         [Header("Movement Variables")]
         [SerializeField] private Vector3 moveDirection;
@@ -246,7 +246,7 @@ namespace project_WAST
                     {
                         if (playerManager.isForced)
                         {
-                            impact = Vector3.zero;
+                            //impact = Vector3.zero;
                             playerManager.isForced = false;
                         }
                     }
@@ -477,7 +477,6 @@ namespace project_WAST
 
             if (playerInteractor.bodyInteractor(Bodyparts.hipsCenter,climbableWallMask,1))
             {
-                Debug.Log("sex");
                 //playerManager.isClimbing = true;
             }
             else

@@ -86,7 +86,6 @@ namespace project_WAST
 
         private void OnTriggerExit(Collider other)
         {
-            Debug.Log(other);
             if (other.transform.CompareTag("MoveObj"))
             {
                 refObj = null;

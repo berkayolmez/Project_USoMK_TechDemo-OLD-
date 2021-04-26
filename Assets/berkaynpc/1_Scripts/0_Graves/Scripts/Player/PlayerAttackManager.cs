@@ -68,7 +68,6 @@ namespace project_WAST
                 return;
             }
 
-            Debug.Log("Test");
             //in animdeyse cagirilmiyor o yüzden isspellcasting
             if (playerInventory.rb_Spell != null)
             {

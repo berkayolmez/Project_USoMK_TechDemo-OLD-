@@ -56,6 +56,7 @@ namespace project_WAST
                 if (inObjs.CompareTag("Player"))
                 {
                     CharacterController cc = inObjs.GetComponent<CharacterController>();
+                    PlayerInteractor playerInteractor = inObjs.GetComponent<PlayerInteractor>();
                     cc.enabled = false;
                     inObjs.transform.position = otherPortal.position;
                     cc.enabled = true;
@@ -93,6 +94,7 @@ namespace project_WAST
                         {
                             inObjs.transform.position = otherPortal.position;
                             myFunctions.AddForceToObjects(inObjs, otherPortal, portalOutForce);
+                            inObjs.transform.SetParent(null);
                             inObjs = null;
                         }
                     }
@@ -107,7 +109,6 @@ namespace project_WAST
             if (other.CompareTag("Player"))
             {
                 inObjs = null;
-                Debug.Log("deneme");
                 // inObjs.Remove(other.gameObject);
             }
 

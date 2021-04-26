@@ -12,6 +12,7 @@ namespace project_WAST
         Animator animator;
         [SerializeField] private GameObject UIPanel;
         public string currentAnim;
+        public bool hideWithMouse;
 
         private void Start()
         {
@@ -35,9 +36,9 @@ namespace project_WAST
                 animator.SetBool("isMouseOn", false);
             }
 
-            if(UIPanel!=null)
+            if(UIPanel!=null && hideWithMouse)
             {
-                UIPanel.SetActive(false);
+               UIPanel.SetActive(false);
             }
         }
 
@@ -45,6 +46,7 @@ namespace project_WAST
         {
             if(UIPanel!=null)
             {
+                animator.SetBool("isMouseOn", false);
                 UIPanel.SetActive(true);
             }
         }

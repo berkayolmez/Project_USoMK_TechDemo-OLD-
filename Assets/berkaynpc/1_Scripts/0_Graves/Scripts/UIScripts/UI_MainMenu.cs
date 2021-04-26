@@ -8,12 +8,8 @@ namespace project_WAST
     {
         [SerializeField] private GameObject mainMenu;
         [SerializeField] private bool isMenuOpen;
-
-        private void Start()
-        {
-            isMenuOpen = true;
-        }
-
+        [SerializeField] private GameObject[] closeObjs;
+       
         private void Update()
         {
             if(Keyboard.current.escapeKey.wasPressedThisFrame) //game pad ekle
@@ -27,6 +23,14 @@ namespace project_WAST
                 else
                 {
                     mainMenu.SetActive(false);
+
+                    if(closeObjs.Length>0)
+                    {
+                        for (int i = 0; i < closeObjs.Length; i++)
+                        {
+                            closeObjs[i].SetActive(false);
+                        }
+                    }
                 }
             }
         }

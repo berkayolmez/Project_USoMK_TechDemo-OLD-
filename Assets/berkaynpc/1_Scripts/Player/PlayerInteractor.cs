@@ -72,7 +72,6 @@ namespace project_WAST
                 Destroy(key.gameObject);
             }
 
-
             if (inputHandler.f_Key_Press && canInteract)
             {
                 HandlePressInteractable(other, true);
@@ -89,7 +88,7 @@ namespace project_WAST
             HandleNearByObj(other,false);
         }
 
-        private void HandleNearByObj(Collider other,bool inArea)
+        public void HandleNearByObj(Collider other,bool inArea)
         {
             IHold holding = other.GetComponent<IHold>();
 
@@ -162,11 +161,7 @@ namespace project_WAST
                     animatorManager.animator.SetBool("isPressing", false);
                 }
             }
-            else
-            {
-                canInteract = true;
-                animatorManager.animator.SetBool("isPressing", false);
-            }
+            
 
             IPickable pickableObj = other.GetComponent<IPickable>();
 

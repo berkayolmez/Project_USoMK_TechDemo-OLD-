@@ -5,7 +5,7 @@ using UnityEngine;
 namespace project_WAST
 {
     [RequireComponent(typeof(LineRenderer))]
-    public class LaserReflector : MonoBehaviour,IReflectable
+    public class LaserReflector : MonoBehaviour,IReflectable    //RAY LENGTH COK KISA ISE LINERENDERER KAFAYI YIYOR O YUZDEN LENGTH DEGERINI BUYUK TUT**********************
     {
         private MyFunctions myFunctions = new MyFunctions();  //BU DEGISEBILIR FARKLI YOL BULUNURSA********
         private List<IReflectable> _iReflectable=new List<IReflectable>();
@@ -19,6 +19,7 @@ namespace project_WAST
            ReflectorDual,
            ReflectorTriple,
            ReflectorQuadro,
+           ReflectorTriple90Degre,
 
         }
         public ReflectorTypes GetReflectorTypes() => reflectorType;
@@ -145,6 +146,24 @@ namespace project_WAST
                             directions.Insert(2, transform.forward + transform.right * 0.25f);
                             directions.Insert(3, transform.forward + transform.right * 0.7f);
                         }
+                        break;
+
+                    case ReflectorTypes.ReflectorTriple90Degre:
+                        rayCount = 3;
+                        if (directions.Count <= 3)
+                        {
+                            directions.Insert(0, -transform.right);
+                            directions.Insert(1, transform.forward);
+                            directions.Insert(2, transform.right);
+                        }
+                        else if (directions.Count > 3)
+                        {
+                            directions.Clear();
+                            directions.Insert(0, -transform.right);
+                            directions.Insert(1, transform.forward);
+                            directions.Insert(2, transform.right);
+                        }
+
                         break;
                 }
 

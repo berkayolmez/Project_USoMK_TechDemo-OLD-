@@ -18,13 +18,14 @@ namespace project_WAST
         {
           PlatformMove,
           PlatformMoveLoop,
-          PlatformRot,
-          PlatformRotLoop,
+          PlatformWithoutController,
         }
         private Vector3 prevPos;
         private Vector3 transformVelocity;
+        private Vector3 transformRotVelo;
         private bool isPlayerHere;
         CharacterController characterController;
+        public Transform playerTransform;
 
         public PlatformTypes GetPlatformType() => platformType;
 
@@ -58,12 +59,18 @@ namespace project_WAST
                 oldEndRot = endPos.rotation;
             }
 
-            if (controllerObjs.Length <= 0)
+            switch(platformType)
             {
-                controllerStatus = true;
-                platformStatus = true;
-                StartCoroutine(MoveObject()); //bu deðiþecek platform türüne göre oto baþlayabilir
-            }
+                case PlatformTypes.PlatformMove:
+                case PlatformTypes.PlatformMoveLoop:
+                    if (controllerObjs.Length <= 0)
+                    {
+                        controllerStatus = true;
+                        platformStatus = true;
+                        StartCoroutine(MoveObject()); //bu deðiþecek platform türüne göre oto baþlayabilir
+                    }
+                    break;
+            }    
         }
 
         private void FixedUpdate()
@@ -75,7 +82,7 @@ namespace project_WAST
             {
                 if(characterController!=null)
                 {
-                    characterController.Move(transformVelocity * Time.deltaTime);
+                    characterController.Move(transformVelocity * Time.deltaTime);                  
                 }
             }
         }
@@ -118,7 +125,8 @@ namespace project_WAST
                 characterController = other.GetComponent<CharacterController>();
                 if(characterController != null)
                 {                   
-                    isPlayerHere = true;                  
+                    isPlayerHere = true;
+                    playerTransform = other.transform;
                 }
             }
 
@@ -133,6 +141,7 @@ namespace project_WAST
             if(other.transform.CompareTag("Player"))
             {              
                 isPlayerHere = false;
+                playerTransform = null;
             }
 
             if (other.transform.CompareTag("MoveObj"))
