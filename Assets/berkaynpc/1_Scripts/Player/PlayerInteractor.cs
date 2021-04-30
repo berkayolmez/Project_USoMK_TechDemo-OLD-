@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,17 +31,19 @@ namespace project_WAST
         PlayerManager playerManager;
         PlayerInventory playerInventory;
         PlayerAnimatorManager animatorManager;
-        public event EventHandler KeyChange;  
-        
+        public event EventHandler KeyChange;
+        public List<IInteractable> intList = new List<IInteractable>();
+
+
         [HideInInspector]
-        public GameObject[] interactorObjs; 
+        public GameObject[] interactorObjs;
 
         [Header("Objects")]
         [SerializeField] private GameObject pickableUIObject;
 
-        [Header("Variables")]     
-        public bool canInteract =true;        
-        [SerializeField] private float pickUItimer=4;
+        [Header("Variables")]
+        public bool canInteract = true;
+        [SerializeField] private float pickUItimer = 4;
 
 
         private void Awake()
@@ -55,6 +57,20 @@ namespace project_WAST
         private void Start()
         {
             pickableUI = FindObjectOfType<PickableUI>();
+            intList.Clear();
+        }
+
+        private void Update()
+        {
+            if (inputHandler.f_Key_Press && canInteract && !playerManager.inAnim)
+            {
+                HandlePressInteractable(true);
+            }
+
+            if (inputHandler.f_Key_Release && !canInteract && !playerManager.inAnim)
+            {
+                HandlePressInteractable(false);
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -64,31 +80,21 @@ namespace project_WAST
 
         private void OnTriggerStay(Collider other)
         {
-            RequirementKeys key = other.GetComponent<RequirementKeys>(); //req olarak deðiþtir
+            RequirementKeys key = other.GetComponent<RequirementKeys>(); //req olarak deÄŸiÅŸtir
 
             if (key != null)
             {
                 GetKey(key.GetKeyType());
                 Destroy(key.gameObject);
             }
-
-            if (inputHandler.f_Key_Press && canInteract)
-            {
-                HandlePressInteractable(other, true);
-            }          
-
-            if (inputHandler.f_Key_Release && !canInteract)
-            {
-                HandlePressInteractable(other, false);
-            }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            HandleNearByObj(other,false);
+            HandleNearByObj(other, false);
         }
 
-        public void HandleNearByObj(Collider other,bool inArea)
+        public void HandleNearByObj(Collider other, bool inArea)
         {
             IHold holding = other.GetComponent<IHold>();
 
@@ -103,7 +109,7 @@ namespace project_WAST
                     else
                     {
                         holding.AreaEmpty();
-                    }                   
+                    }
                 }
             }
 
@@ -111,10 +117,17 @@ namespace project_WAST
 
             if (interactable != null)
             {
+                if (inArea && !intList.Contains(interactable))
+                {
+                    Debug.Log("interactable gelen " + interactable);
+                    intList.Add(interactable);
+                }
+
                 if (!inArea)
                 {
                     interactable.StillPress(false);
                     animatorManager.animator.SetBool("isPressing", false);
+                    intList.Remove(interactable);
                     canInteract = true;
                 }
             }
@@ -122,11 +135,11 @@ namespace project_WAST
             IPickable pickableObj = other.GetComponent<IPickable>();
 
             if (pickableObj != null)
-            {               
+            {
                 if (inArea)
                 {
                     string pickableText = pickableObj.myPickableText;
-                    pickableUI.pickableText.text = "Pick Up (F-Key) "+ pickableText;
+                    pickableUI.pickableText.text = "Pick Up (F-Key) " + pickableText;
                     pickableUI.pickableIcon.enabled = true;
                     pickableUI.pickableIcon.sprite = pickableObj.myPickableIcon;
                     //pickableObj.NearByObject();
@@ -141,9 +154,56 @@ namespace project_WAST
             }
         }
 
-        private void HandlePressInteractable(Collider other,bool isPressed)
+        private void HandlePressInteractable(bool isPressed)
         {
-            IInteractable interactable = other.GetComponent<IInteractable>();
+            if (isPressed)
+            {
+                canInteract = false;
+            }
+            else
+            {
+
+                canInteract = true;
+            }
+
+            if(intList.Count>0)
+            {
+                foreach (var a in intList)
+                {
+                    if (isPressed && ContainsKey(a.reqType))
+                    {
+                        a.Interact();
+                        animatorManager.animator.SetBool("isPressing", true);
+                        animatorManager.PlayTargetAnimation("PressEnter", false);
+                    }
+                    else if (!isPressed && ContainsKey(a.reqType))
+                    {
+                        a.StillPress(false);
+                        animatorManager.animator.SetBool("isPressing", false);
+                    }
+                }
+            }
+
+
+            /*
+            IPickable pickableObj = other.GetComponent<IPickable>();
+
+            if (pickableObj != null)
+            {
+                if (isPressed)
+                {                 
+                    pickableObj.PickInteract(playerManager);
+                    pickableUIObject.SetActive(false);
+
+                    //item alÄ±nÄ±nca farklÄ± bir efett Ã§Ä±ksÄ±n diye corouine var buna kesin bak
+                   // StartCoroutine("PickUpClose", pickUItimer);
+                }
+            }*/
+        }
+
+        /*private void HandlePressInteractable(Collider other,bool isPressed)
+        {
+           // IInteractable interactable = other.GetComponent<IInteractable>();
 
             if (interactable != null && ContainsKey(interactable.reqType))
             {
@@ -162,7 +222,7 @@ namespace project_WAST
                 }
             }
             
-
+            
             IPickable pickableObj = other.GetComponent<IPickable>();
 
             if (pickableObj != null)
@@ -172,13 +232,13 @@ namespace project_WAST
                     pickableObj.PickInteract(playerManager);
                     pickableUIObject.SetActive(false);
 
-                    //item alýnýnca farklý bir efett çýksýn diye corouine var buna kesin bak
+                    //item alÄ±nÄ±nca farklÄ± bir efett Ã§Ä±ksÄ±n diye corouine var buna kesin bak
                    // StartCoroutine("PickUpClose", pickUItimer);
                 }
             }
-        }
+        } */
 
-        
+
         public bool bodyInteractor(Bodyparts whichPart, LayerMask getMask, float interactionDist, out RaycastHit sendHit)
         {
             int partIndex = (int)whichPart;
@@ -203,7 +263,7 @@ namespace project_WAST
         }
 
 
-            #region Requirement Get / Delete / Contains
+        #region Requirement Get / Delete / Contains
         public void GetKey(RequirementTypes.RequirementType reqType)
         {
             if (!ContainsKey(reqType))

@@ -142,6 +142,7 @@ namespace project_WAST
             {              
                 isPlayerHere = false;
                 playerTransform = null;
+                characterController = null;
             }
 
             if (other.transform.CompareTag("MoveObj"))

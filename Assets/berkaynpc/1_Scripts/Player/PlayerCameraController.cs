@@ -81,7 +81,7 @@ namespace project_WAST
                 date = date.Replace("/", "-");
                 date = date.Replace(" ", "_");
                 date = date.Replace(":", "-");
-               // ScreenCapture.CaptureScreenshot(Application.dataPath + "/ScreenShots/SS_" + date + ".png");
+              // ScreenCapture.CaptureScreenshot(Application.dataPath + "/ScreenShots/SS_" + date + ".png");
             }
         }
 
