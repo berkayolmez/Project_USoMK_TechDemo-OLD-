@@ -1,0 +1,18 @@
+newmtl default_Grey
+Kd 0.3962264 0.3962264 0.3962264
+d 1
+
+newmtl default_Blue
+Kd 0.2051887 0.3482589 0.5
+d 1
+
+newmtl default_Black
+Kd 0.2452829 0.230242 0.230242
+d 1
+
+newmtl cubePushBlue
+map_Ke C:/Users/brky2/Desktop/Project_wast/Project_WAST/Assets/berkaynpc/6_Textures/Cubes/PushCubes/cubeBluePushEmission.png
+map_Kd C:/Users/brky2/Desktop/Project_wast/Project_WAST/Assets/berkaynpc/6_Textures/Cubes/PushCubes/cubeBluePush2.png
+Kd 1 1 1
+d 1
+

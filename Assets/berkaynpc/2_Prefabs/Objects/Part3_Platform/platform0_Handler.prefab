@@ -534,17 +534,9 @@ MonoBehaviour:
   assetGuid: 
   m_Mesh: {fileID: 0}
   m_IsSelectable: 1
-  m_SelectedFaces: 04000000
-  m_SelectedEdges:
-  - a: 16
-    b: 17
-  - a: 18
-    b: 16
-  - a: 17
-    b: 19
-  - a: 19
-    b: 18
-  m_SelectedVertices: 10000000110000001200000013000000
+  m_SelectedFaces: 
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!23 &534585630186621032
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -637,17 +629,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817c1d0645659d8479e5c1fe02d9c385, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformStatus: 0
+  currentStatus: 0
+  myID: Platform0_Handler
+  myLogicGateType: 0
+  controllerStatus: 0
+  controllerObjList: []
   platformType: 0
   playerTransform: {fileID: 0}
-  myLogicGateType: 0
-  startPos: {fileID: 534585628824519211}
-  endPos: {fileID: 534585629050001466}
   speed: 1.5
   isStarted: 0
-  controllerObjs:
-  - {fileID: 534585630186621024}
-  controllerStatus: 0
+  startPos: {fileID: 534585628824519211}
+  endPos: {fileID: 534585629050001466}
 --- !u!114 &534585630186621036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -660,14 +652,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351f82dae5632414e8a54662e60444e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentStatus: 0
+  myID: 
+  myLogicGateType: 0
+  controllerStatus: 0
+  controllerObjList: []
+  targetID: []
   timeLength: 1
-  onOffStatus: 0
   isStarted: 0
   startedBool: 1
-  connectedGameObjs:
-  - {fileID: 534585630186621024}
-  controllerObjs: []
-  controllerStatus: 0
 --- !u!114 &534585630186621037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,15 +673,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0feee23df1c1d0c4bac5ab7444f4f5a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockStatus: 0
-  myElementType: 0
-  blockType: 1
+  currentStatus: 0
+  myID: Platform0_HandlerBut
   myLogicGateType: 0
-  interactMarkObj: {fileID: 534585630115641819}
-  connectedGameObjs:
-  - {fileID: 534585630186621024}
-  controllerObjs: []
   controllerStatus: 1
+  controllerObjList: []
+  targetID:
+  - Platform0_Handler
+  blockType: 1
+  myElementType: 0
+  interactMarkObj: {fileID: 534585630115641819}
 --- !u!65 &534585630186621034
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -711,6 +705,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 534585630716611566}
+  - component: {fileID: -548738987788388122}
   m_Layer: 6
   m_Name: platform0_Handler
   m_TagString: Untagged
@@ -735,3 +730,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-548738987788388122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534585630716611567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e0890ed346c2f94fa1097e8c7f720f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectTag: Platform0Handler

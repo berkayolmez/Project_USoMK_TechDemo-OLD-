@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -1756047647806198341, guid: 32be48741e9b9b74992473921cffd5c9, type: 3}
+      propertyPath: objectTag
+      value: PushBoxRed
+      objectReference: {fileID: 0}
     - target: {fileID: 430348652687043392, guid: 32be48741e9b9b74992473921cffd5c9, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

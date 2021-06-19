@@ -1,0 +1,12 @@
+newmtl default_Grey
+Kd 0.3962264 0.3962264 0.3962264
+d 1
+
+newmtl default_Orange
+Kd 1 0.6117647 0.2313725
+d 1
+
+newmtl default_Black
+Kd 0.2452829 0.230242 0.230242
+d 1
+

@@ -17,14 +17,16 @@ MonoBehaviour:
   spellDescription: 
   modelPrefab: {fileID: 0}
   elementType: 0
+  currentTarget: {fileID: 0}
   spellClip: {fileID: 7400000, guid: 82619163d0099264b8987b8df21f1465, type: 2}
   spellWarmUpFX: {fileID: 1971878858151875367, guid: a44e57dcd702eb34fb8144f18f7d3253, type: 3}
   spellCastFX: {fileID: 4382369588918245824, guid: c7726494833ce654dbc3b6bc4e6ef8a2, type: 3}
+  spellKey: 0
   spellAnimation: RT_Spell
   yOffset: 0.25
   sphereCastRadius: 2
   maxCastDistance: 5
-  shakeIntensity: 2
-  shakeTime: 0.2
-  forceAmount: 10
+  cameraShakeIntensity: 2
+  cameraShakeTime: 0.2
+  spellForceAmount: 9
   spellType: 2

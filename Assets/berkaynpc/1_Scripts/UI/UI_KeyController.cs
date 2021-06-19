@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace project_WAST
+namespace project_usomk
 {
     public class UI_KeyController : MonoBehaviour
     {
@@ -14,9 +14,9 @@ namespace project_WAST
         }
         public void RemoveKeys()
         {
-            interactor.DeletKey(RequirementTypes.RequirementType.RedKey);
-            interactor.DeletKey(RequirementTypes.RequirementType.GreenKey);
-            interactor.DeletKey(RequirementTypes.RequirementType.BlueKey);
+            interactor.DeleteKey(RequirementTypes.RequirementType.RedKey);
+            interactor.DeleteKey(RequirementTypes.RequirementType.GreenKey);
+            interactor.DeleteKey(RequirementTypes.RequirementType.BlueKey);
         }
 
         public void AddRedKey()
