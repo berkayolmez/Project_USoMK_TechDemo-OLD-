@@ -28,7 +28,7 @@ Project_USoMK is the first step in creating an Action-Adventure style game with 
 [![Project_USoMK Playlist](/Assets/z_GitHubImages/USOMK_youtube.png)](https://www.youtube.com/watch?v=auG90HygEpo&list=PLrzMY5OA4-O7x6NI5SJ2GlP84X5tN_9cX&index=1)
 
 # Branches
-There are two branches in this project. Of these, "V0_1(OLD)" is the first branch created in the project. The basics of the game mechanics is coded here, platforms and puzzles are designed. In the V0.1 version, problems such as manually connecting many objects, repetitive mesh usage, and texture sizes are seen. The problems experienced in the V0.1 version of the project in the "V0_12" branch have been resolved. To take a quick look at these fixes:
+There are two branches in this project. Of these, "V0_1(OLD)" is the first branch created in the project. The basis of the game mechanics is coded here, platforms and puzzles are designed. In the V0.1 version, problems such as manually connecting many objects, repetitive mesh usage, and texture sizes are seen. The problems experienced in the V0.1 version of the project in the "V0_12" branch have been resolved. To take a quick look at these fixes:
 
   * Observer: There was switched to observer pattern rather than link objects manually using Custom Game Events.Controller objects can now trigger target objects with "string targetID".
   * Object Pooling: Object pooling was planned to prevent the problem since Spawners and Duplicators that instantiate and destroy object causes memory problems.
