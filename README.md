@@ -65,7 +65,7 @@ As a result of the build, the demo used memory between 185-210 MB. In the memory
   <tr><th>Damage System</th> <td> <img src="/Assets/berkaynpc/4_Art/MainMenu/MainMenuUI/workInProgress/damage.png" Width="720;"/> </td> </tr>
   <tr><th>Inverse Kinematics</th> <td> <img src="/Assets/berkaynpc/4_Art/MainMenu/MainMenuUI/workInProgress/ik_2.png" Width="720;"/> </td> </tr>
   <tr><th>Gravity Zones</th> <td> <img src="/Assets/berkaynpc/4_Art/MainMenu/MainMenuUI/workInProgress/gravityZones.png" Width="720;"/> </td> </tr>  
-   <tr><th>Gravity Zones</th> <td> <img src="/Assets/berkaynpc/4_Art/MainMenu/MainMenuUI/workInProgress/wallJump.png" Width="720;"/> </td> </tr>  
+   <tr><th>Wall Jump</th> <td> <img src="/Assets/berkaynpc/4_Art/MainMenu/MainMenuUI/workInProgress/wallJump.png" Width="720;"/> </td> </tr>  
   <tr><th>New Spell Types</th> <td> <img src="/Assets/berkaynpc/4_Art/MainMenu/MainMenuUI/workInProgress/spellTypes.png" Width="720;"/> </td> </tr>
 </table>
 
