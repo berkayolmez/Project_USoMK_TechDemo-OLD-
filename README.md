@@ -25,7 +25,7 @@ Project_USoMK is the first step in creating an Action-Adventure style game with 
 </p>
 
 # Project_USoMK Demo Gameplay
-[![Project_USoMK Playlist](/Assets/z_GitHubImages/USOMK_youtube.png)](https://www.youtube.com/watch?v=XXk2tGmH3Pw&list=PLLwKdpmh1jrG2DNJ1x_R0YPVS62YBM8Wl)
+[![Project_USoMK Playlist](/Assets/z_GitHubImages/USOMK_youtube.png)](https://www.youtube.com/watch?v=c2nUN3hunNw&list=PLLwKdpmh1jrG2DNJ1x_R0YPVS62YBM8Wl&index=1)
 
 # Branches
 There are two branches in this project. Of these, "V0_1(OLD)" is the first branch created in the project. The basis of the game mechanics is coded here, platforms and puzzles are designed. In the V0.1 version, problems such as manually connecting many objects, repetitive mesh usage, and texture sizes are seen. The problems experienced in the V0.1 version of the project in the "V0_12" branch have been resolved. To take a quick look at these fixes:
