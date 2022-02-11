@@ -6,7 +6,7 @@
 Project_USoMK is the first step in creating an Action-Adventure style game with isometric camera angle and continues to be developed as a tech demo. From the beginning of this project, it was basically aimed to create new game mechanics, design platforms and puzzles. In the next stages, it was planned to develop combat / combat system, enemies, inventory system, dialogue system, new movement mechanics. Given these developments, the genre of the game may change in the future.
 
 # Project_USoMK Demo Gameplay
-[![Project_USoMK Playlist](/Assets/z_GitHubImages/USOMK_youtube.png)](https://www.youtube.com/watch?v=c2nUN3hunNw&list=PLLwKdpmh1jrG2DNJ1x_R0YPVS62YBM8Wl&index=1)
+[![Project_USoMK Playlist](/Assets/z_GitHubImages/USOMK_youtube.png)](https://www.youtube.com/watch?v=OWQvExOXpcE&list=PLLwKdpmh1jrG2DNJ1x_R0YPVS62YBM8Wl&index=1)
 <br/>  
 
 # Map
